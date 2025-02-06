@@ -126,49 +126,137 @@ class UserController extends BaseController
 
     public function getUsersList()
     {
-        $userModel = new UserModel();
-        $users = $userModel->getAllUsers();
+        if (isset($_SESSION['user_id'])) {
+            $userModel = new UserModel();
+            $users = $userModel->getAllUsers();
 
-        $data['users'] = $users;
+            $data['users'] = $users;
 
-        return $this->View('users', $data);
+            return $this->View('users', $data);
+        } else {
+            header('location: /');
+        }
     }
 
     public function deleteUser()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $post = $_POST;
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $post = $_POST;
 
-            $userModel = new UserModel();
-            $errors = array();
+                $userModel = new UserModel();
+                $errors = array();
 
-            if ($post['delete_id'] == 0) {
-                $errors[] = 'Nem található azonosító';
-                $_SESSION['errors'] = $errors;
+                if ($post['delete_id'] == 0) {
+                    $errors[] = 'Nem található azonosító';
+                    $_SESSION['errors'] = $errors;
+                    header("Location: /users");
+                    exit;
+                }
+
+                if ($post['delete_id'] == $_SESSION['user_id']) {
+                    $errors[] = 'Saját magadat nem törölheted!';
+                    $_SESSION['errors'] = $errors;
+                    header("Location: /users");
+                    exit;
+                }
+
+                if (!$userModel->deleteUser($post['delete_id'])) {
+                    $errors[] = 'Nem található azonosító';
+                } else {
+                    $_SESSION['success'] = 'A felhasználó sikeresen törölve!';
+                }
+
+                if (!empty($errors)) {
+                    $_SESSION['errors'] = $errors;
+                }
+
                 header("Location: /users");
-                exit;
-            }
-
-            if ($post['delete_id'] == $_SESSION['user_id']) {
-                $errors[] = 'Saját magadat nem törölheted!';
-                $_SESSION['errors'] = $errors;
-                header("Location: /users");
-                exit;
-            }
-
-            if (!$userModel->deleteUser($post['delete_id'])) {
-                $errors[] = 'Nem található azonosító';
             } else {
-                $_SESSION['success'] = 'A felhasználó sikeresen törölve!';
+                header("Location: /users");
             }
-
-            if (!empty($errors)) {
-                $_SESSION['errors'] = $errors;
-            }
-
-            header("Location: /users");
         } else {
-            header("Location: /users");
+            header("Location: /");
+        }
+        exit;
+    }
+
+    public function editUserProfile()
+    {
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $post = $_POST;
+                $errors = array();
+                $update_data = array();
+
+                $userModel = new UserModel();
+
+                $current_datas = $userModel->fetchUserDatas($_SESSION['user_id']);
+
+                if (!is_array($current_datas)) {
+                    $errors[] = 'Hiba a mentés közben.';
+                    $_SESSION['errors'] = $errors;
+                    header('location: /users');
+                    exit;
+                }
+
+                //Amennyiben lett megadva username és az nem egyezik a jelenlegi username-el
+                if (mb_strlen($post['mod_username'] > 0 && $post['mod_username'] != $current_datas['username'])) {
+                    if ($userModel->isUsernameExists($post['mod_username'])) {
+                        $errors[] = "A felhasználónév már szerepel az adatbázisban.";
+                    }
+
+                    if (mb_strlen($post['mod_username']) < 3 || mb_strlen($post['mod_username']) > 25) {
+                        $errors[] = "A felhasználónév minimum 3 és maximum 25 karakterből állhat.";
+                    }
+
+                    $update_data['username'] = $post['mod_username']; //Adat átadása a tömbnek az update-hez
+                }
+
+                //Amennyiben lett megadva email és az nem egyezik a jelenlegi email-el
+                if (mb_strlen($post['mod_email'] > 0 && $post['mod_email'] != $current_datas['email'])) {
+                    if ($userModel->isEmailExists($post['mod_email'])) {
+                        $errors[] = "Az email már szerepel az adatbázisban.";
+                    }
+
+                    if (!filter_var($post['mod_email'], FILTER_VALIDATE_EMAIL)) {
+                        $errors[] = "Nem megfelelő email cím.";
+                    }
+
+                    $update_data['email'] = $post['mod_email'];
+                }
+
+                if (mb_strlen($post['mod_password']) > 0) {
+                    if (mb_strlen($post['mod_password']) < 3 || mb_strlen($post['mod_password']) > 25) {
+                        $errors[] = "A jelszó minimum 3 és maximum 25 karakterből állhat.";
+                    }
+
+                    if ($post['mod_password'] !== $post['mod_password_confirm']) {
+                        $errors[] = "A jelszó megerősítése sikertelen (beírt jelszavak nem egyeznek).";
+                    }
+
+                    $update_data['password'] = $post['mod_password'];
+                }
+
+                //Amennyiben nincs hiba, a felhasználót módosítjuk
+                if (empty($errors)) {
+                    if ($userModel->updateUserDatas($_SESSION['user_id'], $update_data)) {
+                        $_SESSION['success'] = 'Sikeres módosítás!';
+                    } else {
+                        $errors[] = "Hiba a mentés során. Kérlek próbáld újra.";
+                    }
+                }
+
+                if (!empty($errors)) { //Mivel a mentés során még keletlezhetett error, ellenőrizni kell
+                    $_SESSION['errors'] = $errors;
+                }
+
+                header("Location: /profile");
+            } else {
+                header("Location: /profile");
+            }
+        } else {
+            header("Location: /");
         }
         exit;
     }

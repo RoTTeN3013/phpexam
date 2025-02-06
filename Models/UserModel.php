@@ -98,4 +98,38 @@ class UserModel extends BaseModel
             return false;
         }
     }
+
+    public function updateUserDatas($userid, $datas)
+    {
+        if ($userid !== 0) {
+            //Felépítjük a query-t mint egy builder, nem tudjuk pontosan milyen adatok, illetve mely adatok lettek megadva
+            $query = "UPDATE users SET";
+
+            if (isset($datas['username'])) {
+                $username = $datas['username'];
+                $query .= " username = '$username',";
+            }
+
+            if (isset($datas['email'])) {
+                $email = $datas['email'];
+                $query .= " email = '$email',";
+            }
+
+            if (isset($datas['password'])) {
+                $password = password_hash($datas['password'], PASSWORD_DEFAULT);
+                $query .= " password = '$password',";
+            }
+
+            $query .= " WHERE id = '$userid'";
+
+            //Mivel nem tudjuk mennyi adat kerül cserére, az utolsó vesszőt ki kell venni a query-ből, hogy ne fussunk syntax hibára
+            $query = str_replace(', WHERE', ' WHERE', $query);
+
+            if ($this->connection->query($query)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }

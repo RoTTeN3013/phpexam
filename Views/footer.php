@@ -100,6 +100,50 @@
     </div>
 </div>
 
+<!-- Felhasználók editálása -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Adataid szerkesztése</h5>
+            </div>
+            <div class="modal-body">
+                <form action="/edit-profile" method="POST">
+                    <div class="form-group">
+                        <label for="" class="control-label">Vezetéknév</label>
+                        <input type="password" class="form-control" name="mod_last_name" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="control-label">Keresztnév</label>
+                        <input type="password" class="form-control" name="mod_first_name" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="control-label">Felhasználónév</label>
+                        <input type="text" class="form-control" name="mod_username" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="control-label">Email</label>
+                        <input type="text" class="form-control" name="mod_email" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="control-label">Jelszó</label>
+                        <input type="password" class="form-control" name="mod_password" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="control-label">Jelszó ismét</label>
+                        <input type="password" class="form-control" name="mod_password_confirm" value="">
+                    </div>
+                    <div class="mt-3 d-flex gap-1">
+                        <button type="submit" class="btn btn-primary">Módosítás</button>
+                        <button type="button" class="btn btn-secondary prevent_btn"
+                            data-bs-dismiss="modal">Bezárás</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Bootstrap JavaScript (CDN) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

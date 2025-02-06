@@ -37,6 +37,9 @@ switch ($url) {
     case '/delete-user':
         $user->deleteUser();
         break;
+    case '/edit-profile':
+        $user->editUserProfile();
+        break;
     default:
         echo '404 - Page Not Found';
         http_response_code(404);

@@ -18,8 +18,6 @@
                         <td><?php echo $user['fullname']; ?></td>
                         <td><?php echo $user['email']; ?></td>
                         <td>
-                            <button class="btn btn-success" data-id="<?php echo $user['id']; ?>"><i
-                                    class="fa fa-pen"></i></button>
                             <button class="btn btn-danger delete_btn" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                 data-id="<?php echo $user['id']; ?>"><i class="fa fa-trash"></i></button>
                         </td>
