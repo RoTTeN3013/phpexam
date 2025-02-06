@@ -14,8 +14,8 @@
 </head>
 
 <body>
-
-    <div class="conmtainer-fluid navbar d-flex justify-content-center align-items-center">
-        <a href="/users" class="btn btn-primary mx-2">Belépés</a>
-        <a href="/users" class="btn btn-primary">Regisztráció</a>
-    </div>
+    <div class="contents">
+        <div class="conmtainer-fluid navbar d-flex justify-content-center align-items-center">
+            <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#loginModal">Belépés</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Regisztráció</button>
+        </div>

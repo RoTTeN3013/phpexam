@@ -19,8 +19,8 @@ switch ($url) {
     case '/':
         $home->index();
         break;
-    case '/users':
-        $user->getAllUsers();
+    case '/register':
+        $user->registerUser();
         break;
     default:
         echo '404 - Page Not Found';

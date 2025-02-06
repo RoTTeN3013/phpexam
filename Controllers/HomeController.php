@@ -2,12 +2,11 @@
 
 namespace Controllers;
 
-class HomeController //Nincs szükség öröklődésre
+class HomeController extends BaseController
 {
     public function index()
     {
-        include(__DIR__ . "/../Views/navigation.php");
-        include(__DIR__ . "/../Views/welcome.php");
-        include(__DIR__ . "/../Views/footer.php");
+        $data['text'] = "Anyuka";
+        $this->View('welcome', $data);
     }
 }
