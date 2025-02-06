@@ -8,6 +8,7 @@ class BaseController
     {
         extract($data);
         require_once(__DIR__ . "/../Views/navigation.php");
+        require_once(__DIR__ . "/../Views/notifications.php");
         require_once(__DIR__ . "/../Views/$view.php");
         require_once(__DIR__ . "/../Views/footer.php");
     }

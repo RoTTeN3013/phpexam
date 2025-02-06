@@ -22,6 +22,21 @@ switch ($url) {
     case '/register':
         $user->registerUser();
         break;
+    case '/login':
+        $user->logUserin();
+        break;
+    case '/logout':
+        $user->logUserOut();
+        break;
+    case '/profile':
+        $user->showProfile();
+        break;
+    case '/users':
+        $user->getUsersList();
+        break;
+    case '/delete-user':
+        $user->deleteUser();
+        break;
     default:
         echo '404 - Page Not Found';
         http_response_code(404);

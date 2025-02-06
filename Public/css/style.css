@@ -25,9 +25,46 @@ body, html {
 .contents {
     width: 100%;
     height: 100%;
+    margin-top: 60px;
 }
 
 .logo-holder {
     width: 100%;
     height: 100%;
+}
+
+.notification-container {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+
+    z-index: 100;
+
+    gap: 10px;
+
+    min-height: 100px;
+    height: fit-content;
+    min-width: 300px;
+    width: fit-content;
+}
+
+.message-holder {
+    color: white;
+    padding: 10px;
+    height: 40px;
+    width: fit-content;
+    min-width: 300px;
+    border-radius: 10px;
+}
+
+.message-holder.green {
+    background-color: rgb(13, 135, 13, 0.5);
+}
+
+.message-holder.green {
+    background-color: rgb(13, 135, 13, 0.5);
+}
+
+.message-holder.red {
+    background-color: rgba(164, 8, 8, 0.5);
 }
